@@ -13,6 +13,35 @@ return [
     |
     */
 
+    'providers' => [
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+    ],
+    
+    'guards' => [
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+    ],
+    'providers' => [
+        'karyawan' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Karyawan::class,
+        ],
+    ],
+    
+    'guards' => [
+        'karyawan' => [
+            'driver' => 'session',
+            'provider' => 'karyawan',
+        ],
+    ],
+    
+    
+
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',

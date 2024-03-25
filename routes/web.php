@@ -2,17 +2,31 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\KaryawanAuthController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\KaryawanDashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
+// Tampilan Login
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+// Proses Login Admin
+Route::post('/login/admin', [AdminAuthController::class, 'login'])->name('admin.login');
+
+// Proses Login Karyawan
+Route::post('/login/karyawan', [KaryawanAuthController::class, 'login'])->name('karyawan.login');
+
+// Proses Logout
+Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+// Admin Dashboard (setelah login sebagai admin)
+Route::middleware(['auth:admin'])->group(function () {
+    Route::post('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// Karyawan Dashboard (setelah login sebagai karyawan)
+Route::middleware(['auth:karyawan'])->group(function () {
+    Route::post('/karyawan/dashboard', [KaryawanDashboardController::class, 'index'])->name('karyawan.dashboard');
 });
