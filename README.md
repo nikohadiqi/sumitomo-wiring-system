@@ -1,7 +1,7 @@
 <h3>Setelah Clone ketik di terminal</h3>
-<h4>1.composer Install
-    2.npm isntall
-    3.npm run build </h4>
+<h4>1.composer Install</h4>
+    <h4>2.npm install</h4>
+    <h4></h4>3.npm run build</h4>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
