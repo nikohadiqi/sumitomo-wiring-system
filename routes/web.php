@@ -8,7 +8,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\KaryawanDashboardController;
 
 // Tampilan Login
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 })->name('login');
 
