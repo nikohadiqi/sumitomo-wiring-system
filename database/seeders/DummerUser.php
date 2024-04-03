@@ -24,7 +24,7 @@ class DummerUser extends Seeder
                 'name'=>'Admin',
                 'email'=>'admin@gmail.com',
                 'role'=>'admin',
-                'password'=>bcrypt('operator')
+                'password'=>bcrypt('admin')
             ],
         ];
 
