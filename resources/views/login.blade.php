@@ -1,37 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 </head>
-
 <body>
-    <div class="container">
-        <h1> Login</h1>
+    <h2>Login</h2>
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
+        <label for="role">Role:</label><br>
+        <select name="role" id="role" required>
+            <option value="admin">Admin</option>
+            <option value="karyawan">Karyawan</option>
+        </select><br><br>
+        <label for="name">Email:</label><br>
+        <input type="name" name="name" id="name" value="{{ old('name') }}" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" id="password" required><br>
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $item )
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
+            <div>
+                {{ $errors->first() }}
             </div>
-            @endif
-                <form action="" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" name="email" value="{{ old('email') }}" class="form-control"
-                            id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" name="password" value="{{ old('password') }}" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+        @endif
+        <button type="submit">Login</button>
+    </form>
 </body>
+</html>

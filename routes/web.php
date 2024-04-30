@@ -3,25 +3,30 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OperatorController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\KaryawanAuthController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\KaryawanDashboardController;
 
-Route::get('login', 'AdminAuthController@showLoginForm')->name('admin.login');
-Route::prefix('admin')->group(function () {
-    // Rute untuk menampilkan formulir login
+// Tampilan Login
+Route::get('/', function () {
+    return view('login');
+})->name('login');
 
-    // Rute untuk memproses formulir login
-    Route::post('login', 'AdminAuthController@login')->name('admin.login.submit');
-    // Rute untuk logout
-    Route::post('logout', 'AdminAuthController@logout')->name('admin.logout');
+// Proses Login Admin
+Route::post('/login/admin', [AdminAuthController::class, 'login'])->name('admin.login');
+
+// Proses Login Karyawan
+Route::post('/login/karyawan', [KaryawanAuthController::class, 'login'])->name('karyawan.login');
+
+// Proses Logout
+Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+// Admin Dashboard (setelah login sebagai admin)
+Route::middleware(['auth:admin'])->group(function () {
+    Route::post('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
 
-Route::prefix('user')->group(function () {
-    // Rute untuk menampilkan formulir login
-    Route::get('login', 'UserAuthController@showLoginForm')->name('user.login');
-    // Rute untuk memproses formulir login
-    Route::post('login', 'UserAuthController@login')->name('user.login.submit');
-    // Rute untuk logout
-    Route::post('logout', 'UserAuthController@logout')->name('user.logout');
+// Karyawan Dashboard (setelah login sebagai karyawan)
+Route::middleware(['auth:karyawan'])->group(function () {
+    Route::post('/karyawan/dashboard', [KaryawanDashboardController::class, 'index'])->name('karyawan.dashboard');
 });
