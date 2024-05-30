@@ -14,7 +14,7 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        
+        // mengecek data di database
         $operator = DB::table('operator')->get();
  
     	// mengirim data pegawai ke view index
@@ -26,6 +26,7 @@ class OperatorController extends Controller
      */
     public function create()
     {
+        // menuju tampilan create
         return view('admin.create');
     }
 
@@ -38,6 +39,7 @@ class OperatorController extends Controller
         $validatedData = $request->validate([
             'username'     => 'required|max:25',
             'password'     => 'required|max:15',
+            'id_operator'     => 'required|max:15',
             'tanggal_lahir'   => 'required',
             'alamat'   => 'required',
             'create_at' => 'now();',
@@ -50,6 +52,7 @@ class OperatorController extends Controller
         // Membuat pengguna baru dengan data yang sudah di-hash
         $user = operator::create([
             'username' => $validatedData['username'],
+            'id_operator' => $validatedData['id_operator'],
             'tanggal_lahir' => $validatedData['tanggal_lahir'],
             'password' => $hashedPassword,
             'alamat' => $validatedData['alamat'],
@@ -72,7 +75,9 @@ class OperatorController extends Controller
      */
     public function edit(operator $operator)
     {
-        return view('admin.edit', compact('admin.operator'));
+        // menuju ke tampilan edit
+        $operator = Operator::find('id');
+        return view('admin.edit', compact('operator'));
     }
 
     /**
@@ -80,33 +85,44 @@ class OperatorController extends Controller
      */
     public function update(Request $request, operator $operator)
     {
-        $request->validate([
+        // vadlidasi data dari requset
+        $validatedData =$request->validate([
             'username'     => 'required|max:25',
             'password'     => 'required|max:15',
+            'id_operator'     => 'required|max:15',
             'tanggal_lahir'   => 'required',
             'alamat'   => 'required',
             'create_at' => 'now();',
             'update_at' => 'now();'
         ]);
-  
-        $operator->update([
-            'username'     => $request->username,
-            'password'   => $request->password,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'alamat'    => $request->alamat,
+        
+        // update data kecuali password
+        $operator->username = $validatedData['username'];
+        $operator->id_operator = $validatedData['id_operator'];
+        $operator->tanggal_lahir = $validatedData['tanggal_lahir'];
+        $operator->alamat = $validatedData['alamat'];
 
-        ]);
+        // mengecek password
+        if ($request->filled('password')) {
+            $operator->password = Hash::make($validatedData['password']);
+        }
+        
+        // update data ke database
+        $operator->update($request->all());
+
+        // kembali ke tampilan index operator
         return redirect()->route('admin.operator')->with('success','Product updated successfully');
     }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(operator $operator)
     {
-        //delete post
+        // menghapus data
         $operator->delete();
 
-        //redirect to index
+        //kembali ke tampilan index operator
         return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Dihapus!']);
     
     }

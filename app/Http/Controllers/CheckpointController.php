@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CheckPoint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
-class RobotController extends Controller
+
+class CheckpointController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $operator = DB::table('checkpoint')->get();
+ 
+    	// mengirim data pegawai ke view index
+    	return view('admin.checkpoint');
     }
 
     /**

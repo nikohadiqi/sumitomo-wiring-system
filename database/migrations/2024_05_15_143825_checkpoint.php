@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('operator', function (Blueprint $table) {
+        Schema::create('checkpoint', function (Blueprint $table) {
             $table->id();
-            $table->char('username');
-            $table->char('password');
-            $table->char('id_operator');
-            $table->date('tanggal_lahir');
-            $table->string('alamat');
+            $table->char('nama_posisi');
+            $table->char('status');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('operator');
+        Schema::dropIfExists('checkpoint');
     }
 };

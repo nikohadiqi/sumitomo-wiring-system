@@ -11,13 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('robot');
         Schema::create('robot', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_robot');
             $table->char('nama');
             $table->char('tipe');
             $table->string('baterai');
             $table->string('warna');
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            
+            $table->foreign('id_robot')->references('id')->on('checkpoint');
+
         });
     }
 

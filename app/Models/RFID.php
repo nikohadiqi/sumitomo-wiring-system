@@ -1,19 +1,12 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Robot extends Model
+class RFID extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-      'nama',
-      'id_robot',
-      'tipe',
-      'baterai',
-      'warna',
-    ];
+    protected $fillable = ['uid', 'label'];
 }
