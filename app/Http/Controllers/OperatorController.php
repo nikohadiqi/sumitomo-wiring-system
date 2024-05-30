@@ -76,7 +76,7 @@ class OperatorController extends Controller
     public function edit(operator $operator)
     {
         // menuju ke tampilan edit
-        $operator = Operator::find('id');
+        
         return view('admin.edit', compact('operator'));
     }
 

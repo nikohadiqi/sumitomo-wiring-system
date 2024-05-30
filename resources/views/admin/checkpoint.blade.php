@@ -1,6 +1,6 @@
 @extends('app.app')
 
-@section('title', 'Operator')
+@section('title', 'CheckPoint')
 
 @section('content')
         {{-- MainBar --}}
