@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function karyawan()
+    {
+        return view('operator.operator');
+    }
+    public function index()
+    {
+        return view('admin.operator');
+    }
     public function showLoginForm()
     {
         return view('admin.login');
