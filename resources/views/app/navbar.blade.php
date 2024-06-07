@@ -25,7 +25,7 @@
         <div class="w-1/2 h-auto flex items-center justify-between bg-[#486FBC]">
             <div class=" flex items-left justify-center px-4 my-6 ml-[18rem] text-right">
                 <img class="w-7 h-7 mt-1" src={{ url('/img/icon_profile-01.png') }} alt="PBL">
-                <a href="#" class="font-inter text-[#F5F5F5] text-2xl mx-3">LogOut</a>
+                <a href="/logout" class="font-inter text-[#F5F5F5] text-2xl mx-3">LogOut</a>
             </div>
         </div>
     </nav>

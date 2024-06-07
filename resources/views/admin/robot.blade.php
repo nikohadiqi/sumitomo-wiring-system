@@ -49,7 +49,7 @@
                                         </th>
                                         <th scope="col"
                                             class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
-                                            Nomor Seri
+                                            ID Robot
                                         </th>
                                         <th scope="col"
                                             class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
@@ -63,21 +63,23 @@
                                 </thead>
 
                                 <tbody>
+                                    <?php $no=0; ?>
+                                    @foreach($robot as $r)
                                     <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">1</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">{{ ++$no }}</td>
                                         <td class="text-sm text-gray-900 font-light text-center px-6 py-4 whitespace-nowrap">
-                                            Mark
+                                            {{ $r->nama }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light text-center px-6 py-4 whitespace-nowrap">
-                                            Otto
+                                            {{ $r->tipe }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 text-center whitespace-nowrap">
-                                            Otto
+                                            {{ $r->baterai }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 text-center whitespace-nowrap">
-                                            Otto
+                                            {{ $r->id_robot }}
                                         </td>
-                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td class="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             <input id="" type="color" class=" rounded-full" />
                                         </td>
                                         <td class="flex px-6 py-2 ">
@@ -91,6 +93,7 @@
                                             </a>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

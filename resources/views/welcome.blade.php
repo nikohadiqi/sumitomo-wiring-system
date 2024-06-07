@@ -20,8 +20,8 @@
 
 </nav>
 
-    <form action="" class="bg-white w-[70%] h-auto p-7 rounded-xl mx-auto max-w-[1000px]">
-
+    <form action="/proses_login" method="POST" class="bg-white w-[70%] h-auto p-7 rounded-xl mx-auto max-w-[1000px]">
+      @csrf
         <div class="mx-auto max-w-[17rem]">
             <h1 class="text-center text-5xl text-blue-900">Login</h1>
             <p class="text-center text-md text-blue-700">AGV Traffic Control System (ATCS)</p>
@@ -29,12 +29,12 @@
 
             <div class="bg-gray-200 flex items-center text-lg mb-6 md:mb-8 rounded-xl">
                 <img class=" w-6 object-contain m-2" src={{url('/img/PersonIcon.png')}} alt="PersonIcon">
-                <input type="Username" id="Username" class=" bg-gray-200 pl-1 py-2 md:py-4 focus:outline-none w-full rounded-xl" placeholder="Username" name="Username" />
+                <input type="username" name="username" id="username" class=" bg-gray-200 pl-1 py-2 md:py-4 focus:outline-none w-full rounded-xl" placeholder="Username" name="Username" />
 
             </div>
             <div class="bg-gray-200 flex items-center text-lg mb-6 md:mb-8 rounded-xl">
                 <img class="w-6 object-contain m-2" src={{url('/img/lock.png')}} alt="lock">
-                <input type="password" id="password" class="bg-gray-200 pl-1 py-2 md:py-4 focus:outline-none w-full rounded-xl" placeholder="Password" name="password" />
+                <input type="password" name="password" id="password" class="bg-gray-200 pl-1 py-2 md:py-4 focus:outline-none w-full rounded-xl" placeholder="Password" name="password" />
 
             </div>
             <button class="bg-[#7488C5] font-medium p-2 md:p-4 text-white uppercase w-full rounded-xl">Login</button>

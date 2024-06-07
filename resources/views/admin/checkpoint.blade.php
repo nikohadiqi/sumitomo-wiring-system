@@ -32,39 +32,41 @@
                                 <thead class="bg-white border-b border-0">
                                     <tr>
                                         <th scope="col"
-                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
                                             No
                                         </th>
                                         <th scope="col"
-                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
                                             Nama
                                         </th>
                                         <th scope="col"
-                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
                                             Status
                                         </th>
                                         <th scope="col"
-                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
                                             Aksi
                                         </th>
                                         <th scope="col"
-                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-center border-b border-[#607FBB] ml-14 w-24">
                                         </th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
+                                    <?php $no=0; ?>
+                                    @foreach($checkpoint as $cp)
                                     <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1</td>
-                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            Mark
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">{{ ++$no }}</td>
+                                        <td class="text-sm text-gray-900 text-center font-light px-6 py-4 whitespace-nowrap">
+                                            {{ $cp->nama_posisi }}
                                         </td>
-                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            Otto
+                                        <td class="text-sm text-gray-900 text-center font-light px-6 py-4 whitespace-nowrap">
+                                            <span id="status-{{ $cp->id }}">{{ $cp->status }}</span>
                                         </td>
-                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="checkbox"
-                                                class="appearance-none w-[3rem] focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-5 before:w-5 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5" />
+                                        <td class="text-sm text-gray-900 font-light text-center px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" id="status-checkbox-{{ $cp->id }}"
+                                            onchange="toggleStatus({{ $cp->id }})" class="appearance-none w-[3rem] focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-5 before:w-5 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5" />
                                         </td>
                                         <td class="flex text-gray-900 px-6 py-2 ">
                                             <a href="#" class="my-5 mx-3">
@@ -74,6 +76,7 @@
                                                 <img class="w-5 my-2 items-center justify-center" src={{ url('/img/bin.png') }} alt="PBL">
                                             </a>
 
+                                            @endforeach
                                         </td>
                                     </tr>
                                 </tbody>
@@ -85,5 +88,30 @@
         </div>
 @endsection
 </body>
+
+<script>
+    function toggleStatus(id) {
+        const checkbox = document.getElementById(`status-checkbox-${id}`);
+        const statusText = document.getElementById(`status-${id}`);
+
+        if (checkbox.checked) {
+            statusText.innerText = 'menyala';
+        } else {
+            statusText.innerText = 'tidak menyala';
+        }
+
+        // Jika Anda ingin menyimpan status ini ke database secara asinkron, Anda dapat menggunakan fetch atau AJAX di sini
+         fetch(`/admin/robot/${id}`, {
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json',
+                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+             },
+             body: JSON.stringify({ status: checkbox.checked ? 'menyala' : 'tidak menyala' })
+         }).then(response => response.json())
+           .then(data => console.log(data))
+           .catch(error => console.error('Error:', error));
+    }
+</script>
 
 </html>
