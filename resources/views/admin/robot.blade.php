@@ -79,8 +79,8 @@
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 text-center whitespace-nowrap">
                                             {{ $r->id_robot }}
                                         </td>
-                                        <td class="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input id="" type="color" class=" rounded-full" />
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="w-7 h-7 inline-block rounded-full" style="background-color: {{ $r->warna}}"></div>
                                         </td>
                                         <td class="flex px-6 py-2 ">
                                             <a href="#" class="my-5 mx-3">
