@@ -50,14 +50,14 @@
                                             placeholder="Username" required="">
                                             <option value="operator">Operator</option>
                                             <option value="admin">Admin</option>
-                                        <input name="id_operator" type="text"
-                                            id="id_operator"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                            placeholder="ID Operator" required="">
-                                        <input name="tanggal_lahir" type="date"
-                                            id="tanggal_lahir"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                            placeholder="Tanggal Lahir" required="">
-                                        <textarea name="alamat" id="alamat"class="bg-gray-50 my-3 border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                            placeholder="Alamat" required=""></textarea>
+                                            <input name="id_operator" type="text"
+                                                id="id_operator"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                                                placeholder="ID Operator" required="">
+                                            <input name="tanggal_lahir" type="date"
+                                                id="tanggal_lahir"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                                                placeholder="Tanggal Lahir" required="">
+                                            <textarea name="alamat" id="alamat"class="bg-gray-50 my-3 border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                                                placeholder="Alamat" required=""></textarea>
                                     </div>
                                     <hr class="w-full h-px bg-[#18517C]">
                                     <div class="flex justify-center items-center mx-[50%] my-3">
@@ -120,7 +120,8 @@
                                         <td
                                             class="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             {{ $p->alamat }}
-                                            <form action="{{ route('operator.destroy', $p->id) }}" method="POST">
+                                        </td>
+                                        <form action="{{ route('operator.destroy', $p->id) }}" method="POST">
                                         <td class="flex px-6 py-2 ">
                                             <a href={{ route('operator.edit', $p->id) }} class="my-5 mx-3">
                                                 <img class="w-5 my-2 items-center justify-center"
@@ -145,35 +146,35 @@
     </div>
 @endsection
 
-@section ("scripts")
-<script>
-    const button = document.querySelector("#createProductModalButton");
-    const OpenModal = document.querySelector("#OpenModal");
-    const screen = document.querySelector("#screen");
+@section('scripts')
+    <script>
+        const button = document.querySelector("#createProductModalButton");
+        const OpenModal = document.querySelector("#OpenModal");
+        const screen = document.querySelector("#screen");
 
-    const toggleVisibility = () => {
-        const elements = [OpenModal, screen];
-        elements.forEach(element => {
-            if (element.classList.contains("hidden")) {
-                element.classList.add("block");
-                element.classList.remove("hidden");
-            } else {
-                element.classList.add("hidden");
-                element.classList.remove("block");
-            }
+        const toggleVisibility = () => {
+            const elements = [OpenModal, screen];
+            elements.forEach(element => {
+                if (element.classList.contains("hidden")) {
+                    element.classList.add("block");
+                    element.classList.remove("hidden");
+                } else {
+                    element.classList.add("hidden");
+                    element.classList.remove("block");
+                }
+            });
+        };
+
+        button.addEventListener('click', () => {
+            console.log("Button clicked");
+            toggleVisibility();
         });
-    };
 
-    button.addEventListener('click', () => {
-        console.log("Button clicked");
-        toggleVisibility();
-    });
-
-    screen.addEventListener('click', () => {
-        console.log("Screen clicked");
-        toggleVisibility();
-    });
-</script>
+        screen.addEventListener('click', () => {
+            console.log("Screen clicked");
+            toggleVisibility();
+        });
+    </script>
 @endsection
 </body>
 

@@ -15,10 +15,10 @@ class CheckpointController extends Controller
      */
     public function index()
     {
-        $operator = DB::table('checkpoint')->get();
+        $checkpoint = DB::table('checkpoint')->get();
  
     	// mengirim data pegawai ke view index
-    	return view('admin.checkpoint');
+    	return view('admin.checkpoint', ['checkpoint' => $checkpoint]);
     }
 
     /**
@@ -34,7 +34,22 @@ class CheckpointController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         // Validasi data yang diterima dari request
+         $validatedData = $request->validate([
+            'nama_posisi'     => 'required|max:25',
+            'status'     => 'required|max:15',
+            'create_at' => 'now();',
+            'update_at' => 'now();'
+        ]);
+
+        // Membuat pengguna baru dengan data yang sudah di-hash
+        $user = checkpoint::create([
+            'nama_posisi' => $validatedData['nama_posisi'],
+            'status' => $validatedData['status'],
+        ]);
+
+        // Mengembalikan respons, misalnya redirect atau JSON response
+        return redirect()->route('admin.checkpoint')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -56,16 +71,64 @@ class CheckpointController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update_status(Request $request, $id)
     {
-        //
+        {
+            $status = $request->input('status');
+            $model = checkpoint::findOrFail($id);  // Ganti dengan nama model Anda
+            $model->status = $status;
+            $model->save();
+    
+            return response()->json(['success' => true]);
+        }
+    }
+    public function update(Request $request, checkpoint $checkpoint)
+    {
+        // vadlidasi data dari requset
+        $validatedData =$request->validate([
+            'nama_posisi'     => 'required|max:25',
+            'status'     => 'required|max:15',
+            'create_at' => 'now();',
+            'update_at' => 'now();'
+        ]);
+        
+        // update data kecuali password
+        $checkpoint->username = $validatedData['username'];
+        $checkpoint->id_operator = $validatedData['id_operator'];
+        $checkpoint->tanggal_lahir = $validatedData['tanggal_lahir'];
+        $checkpoint->alamat = $validatedData['alamat'];
+
+        // mengecek password
+        if ($request->filled('password')) {
+            $checkpoint->password = Hash::make($validatedData['password']);
+        }
+        
+        // update data ke database
+        $checkpoint->update($request->all());
+
+        // kembali ke tampilan index operator
+        return redirect()->route('admin.checkpoint')->with('success','Product updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(checkpoint $checkpoint)
     {
-        //
+        // menghapus data
+        $checkpoint->delete();
+
+        //kembali ke tampilan index operator
+        return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Dihapus!']);
+    
+    }
+    public function toggleStatus(Request $request)
+    {
+        $checkpoint = Checkpoint::find($request->id);
+        if ($checkpoint) {
+            $checkpoint->status = $checkpoint->status === 'menyala' ? 'mati' : 'menyala';
+            $checkpoint->save();
+        }
+        return response()->json(['status' => $checkpoint->status]);
     }
 }

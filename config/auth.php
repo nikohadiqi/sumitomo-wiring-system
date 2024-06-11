@@ -13,35 +13,6 @@ return [
     |
     */
 
-    'providers' => [
-        'admins' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
-        ],
-    ],
-    
-    'guards' => [
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admins',
-        ],
-    ],
-    'providers' => [
-        'karyawan' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Karyawan::class,
-        ],
-    ],
-    
-    'guards' => [
-        'karyawan' => [
-            'driver' => 'session',
-            'provider' => 'karyawan',
-        ],
-    ],
-    
-    
-
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
@@ -92,6 +63,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+            'table' => 'user'
         ],
 
         // 'users' => [
@@ -109,7 +81,7 @@ return [
     | than one user table or model in the application and you want to have
     | separate password reset settings based on the specific user types.
     |
-    | The expire time is the number of minutes that each reset token will be
+    | The expiry time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |

@@ -12,9 +12,10 @@ class RFIDController extends Controller
     {
         // mengecek data di database
         $RFID = DB::table('rfid_data')->get();
- 
+        return response()->json([
+            "uid" =>$RFID
+        ]);
     	// mengirim data pegawai ke view index
-    	return view('rfid',['RFID' => $RFID]);
     }  
     public function store(Request $request)
     {

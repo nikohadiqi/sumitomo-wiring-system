@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('checkpoint', function (Blueprint $table) {
             $table->id();
             $table->char('nama_posisi');
-            $table->char('status');
+            $table->string('status');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

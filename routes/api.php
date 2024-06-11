@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\RFIDController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/save_rfid_data', [RFIDController::class, 'index']);
 Route::post('/save_rfid_data', [RFIDController::class, 'store']);
+
+Route::post('/data', [ApiController::class, 'store']);

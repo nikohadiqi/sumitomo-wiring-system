@@ -13,7 +13,7 @@ class RobotController extends Controller
      */
     public function index()
     {
-               // mengecek data di database
+        // mengecek data di database
         $robot = DB::table('robot')->get();
  
     	// mengirim data pegawai ke view index
@@ -34,7 +34,7 @@ class RobotController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'username'     => 'required|max:25',
+            'nama'     => 'required|max:25',
             'password'     => 'required|max:15',
             'id_operator'     => 'required|max:15',
             'tanggal_lahir'   => 'required',

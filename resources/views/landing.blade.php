@@ -1,56 +1,52 @@
-@extends('app.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Checkpoints</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
 
-@section('title', 'RFID')
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and set its view
+        var map = L.map('map').setView([-6.200000, 106.816666], 5); // Centered in Jakarta
 
-@section('content')
-        {{-- MainBar --}}
-        <table class="w-full ">
-            <div
-                class="bg-white w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 h-[5rem] ">
-                <button type="button" id="createProductModalButton"
-                    data-modal-target="createProductModal" data-modal-toggle="createProductModal"
-                    class="flex items-center justify-center bg-blue-800 text-white bg-primary-400 hover:bg-primary-100 rounded-full focus:ring-4 focus:ring-primary-300 font-medium text-xs px-4 py-2 dark:bg-primary-400 dark:hover:bg-primary-400 focus:outline-none dark:focus:ring-primary-400 mr-[1rem]">
-                    <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                    </svg>
-                    Add product
-                </button>
-            </div>
-            <thead class="bg-white border-b border-0">
-                <tr>
-                    <th scope="col"
-                        class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
-                        No
-                    </th>
-                    <th scope="col"
-                        class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
-                        Nama
-                    </th>
-                    <th scope="col"
-                        class="text-sm font-medium text-gray-900 px-6 py-4 text-left border-b border-[#607FBB] ml-14 w-24">
-                        Status
-                    </th>
+        // Load and display tile layer on the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-                </tr>
-            </thead>
+        // Array of checkpoints passed from the controller
+        var checkpoints = @json($checkpoints);
 
-            <tbody>
-                <?php $no=0; ?>
-                @foreach($RFID as $O)
-                <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ++$O }}</td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {{$O->uid}}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {{$O->label}}
-                    </td>
+        // Draw checkpoints and lines between them
+        for (var i = 0; i < checkpoints.length; i++) {
+            // Draw circle for each checkpoint
+            var circle = L.circle([checkpoints[i].lat, checkpoints[i].lng], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 50000
+            }).addTo(map);
 
-                        @endforeach
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-@endsection
+            // Draw line to the next checkpoint if it exists
+            if (i < checkpoints.length - 1) {
+                var latlngs = [
+                    [checkpoints[i].lat, checkpoints[i].lng],
+                    [checkpoints[i+1].lat, checkpoints[i+1].lng]
+                ];
+                var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map);
+            }
+        }
+    </script>
+</body>
+</html>
