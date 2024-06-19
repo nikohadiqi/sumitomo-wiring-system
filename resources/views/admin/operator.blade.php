@@ -29,45 +29,6 @@
                                     Add product
                                 </a>
                             </div>
-
-                            <div id="OpenModal"
-                                class="fixed z-20 w-[40%] h-[95%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-                                <form action="{{ route('operator.store') }}" method="POST">
-                                    @csrf
-                                    <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
-                                        Form Operator
-                                    </div>
-                                    <hr class="w-30 h-px mx-5 mr-[20] bg-[#18517C]">
-                                    <div class="my-5 mx-10">
-                                        <input name="username" type="text"
-                                            id="username"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
-                                            placeholder="Username" required="">
-                                        <input name="password" type="password"
-                                            id="password"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
-                                            placeholder="password" required="">
-                                        <select name="role" type="text"
-                                            id="role"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
-                                            placeholder="Username" required="">
-                                            <option value="operator">Operator</option>
-                                            <option value="admin">Admin</option>
-                                            <input name="id_operator" type="text"
-                                                id="id_operator"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                                placeholder="ID Operator" required="">
-                                            <input name="tanggal_lahir" type="date"
-                                                id="tanggal_lahir"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                                placeholder="Tanggal Lahir" required="">
-                                            <textarea name="alamat" id="alamat"class="bg-gray-50 my-3 border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
-                                                placeholder="Alamat" required=""></textarea>
-                                    </div>
-                                    <hr class="w-full h-px bg-[#18517C]">
-                                    <div class="flex justify-center items-center mx-[50%] my-3">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                                            Button
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
                             <thead class="bg-white border-b border-0">
                                 <tr>
                                     <th scope="col "
@@ -117,23 +78,26 @@
                                             {{ $p->tanggal_lahir }}
 
                                         </td>
-                                        <td
-                                            class="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td class="text-sm text-justify text-gray-900 font-light whitespace-nowra">
                                             {{ $p->alamat }}
                                         </td>
                                         <form action="{{ route('operator.destroy', $p->id) }}" method="POST">
-                                        <td class="flex px-6 py-2 ">
-                                            <a href={{ route('operator.edit', $p->id) }} class="my-5 mx-3">
-                                                <img class="w-5 my-2 items-center justify-center"
-                                                    src={{ url('/img/pencil2.png') }} alt="PBL">
-                                            </a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="my-5 mx-3">
-                                                <img class="w-5 my-2 items-center justify-center"
-                                                    src={{ url('/img/bin.png') }} alt="PBL">
-                                            </button>
-                                        </td>
+                                            <td class="flex px-6 py-2 ">
+                                                <a href="#" class="edit-btn my-5 mx-3 cursor-pointer"
+                                                    data-id="{{ $p->id }}" data-username="{{ $p->username }}"
+                                                    data-id_operator="{{ $p->id_operator }}"
+                                                    data-tanggal_lahir="{{ $p->tanggal_lahir }}"
+                                                    data-alamat="{{ $p->alamat }}">
+                                                    <img class="w-5 my-2 items-center justify-center"
+                                                        src="{{ url('/img/pencil2.png') }}" alt="Edit">
+                                                </a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="my-5 mx-3">
+                                                    <img class="w-5 my-2 items-center justify-center"
+                                                        src={{ url('/img/bin.png') }} alt="PBL">
+                                                </button>
+                                            </td>
                                         </form>
                                     </tr>
                                 @endforeach
@@ -144,38 +108,221 @@
             </div>
         </div>
     </div>
-@endsection
+    {{-- Modal Create --}}
 
+    <div id="OpenModalCreate"
+        class="fixed z-20 w-[40%] h-[95%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
+        <form action="{{ route('operator.store') }}" method="POST">
+            @csrf
+            <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
+                Form Operator
+            </div>
+            <hr class="w-30 h-px mx-5 mr-[20] bg-[#18517C]">
+            <div class="my-5 mx-10">
+                <input name="username" type="text"
+                    id="username"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    placeholder="Username" required="">
+                <input name="password" type="password"
+                    id="password"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    placeholder="password" required="">
+                <select name="role" type="text"
+                    id="role"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    placeholder="Username" required="">
+                    <option value="operator">Operator</option>
+                    <option value="admin">Admin</option>
+                    <input name="id_operator" type="text"
+                        id="id_operator"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                        placeholder="ID Operator" required="">
+                    <input name="tanggal_lahir" type="date"
+                        id="tanggal_lahir"class="bg-gray-50 my-3  border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                        placeholder="Tanggal Lahir" required="">
+                    <textarea name="alamat" id="alamat"class="bg-gray-50 my-3 border-gray-300 text-sm w-full  p-2.5 rounded-lg border"
+                        placeholder="Alamat" required=""></textarea>
+            </div>
+            <hr class="w-full h-px bg-[#18517C]">
+            <div class="flex justify-center items-center mx-[50%] my-3">
+                <button type="button"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full"
+                    id="createModalCancelButton">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {{-- Modal Edit --}}
+    <div id="OpenModalEdit"
+        class="fixed z-20 w-[40%] h-[83%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
+        <form id="editForm" method="POST" action="{{ route('operator.update', $p->id) }}">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="edit_id" id="edit_id">
+            <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
+                Form Operator
+            </div>
+            <hr class="w-30 h-px mx-5 mr-[20] bg-[#18517C]">
+            <div class="my-5 mx-10">
+                <input name="username" type="text" id="edit_username"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required>
+                <input name="password" type="password" id="edit_password"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    placeholder="Password Baru" required>
+                <input name="id_operator" type="text" id="edit_id_operator"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required>
+                <input name="tanggal_lahir" type="date" id="edit_tanggal_lahir"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required>
+                <textarea name="alamat" id="edit_alamat"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required></textarea>
+            </div>
+            <hr class="w-full h-px bg-[#18517C]">
+            <div class="flex justify-center items-center mx-[50%] my-3">
+                <button type="button"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full"
+                    id="editModalCancelButton">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+
+@endsection
 @section('scripts')
     <script>
-        const button = document.querySelector("#createProductModalButton");
-        const OpenModal = document.querySelector("#OpenModal");
-        const screen = document.querySelector("#screen");
+        document.addEventListener('DOMContentLoaded', function() {
+            const createButton = document.querySelector("#createProductModalButton");
+            const editButtons = document.querySelectorAll(".edit-btn");
+            const OpenModalCreate = document.querySelector("#OpenModalCreate");
+            const OpenModalEdit = document.querySelector("#OpenModalEdit");
+            const screen = document.querySelector("#screen");
+            const editModalCancelButton = document.querySelector("#editModalCancelButton");
+            const createModalCancelButton = document.querySelector("#createModalCancelButton");
+            const editForm = document.querySelector("#editForm");
 
-        const toggleVisibility = () => {
-            const elements = [OpenModal, screen];
-            elements.forEach(element => {
-                if (element.classList.contains("hidden")) {
-                    element.classList.add("block");
-                    element.classList.remove("hidden");
-                } else {
-                    element.classList.add("hidden");
-                    element.classList.remove("block");
-                }
-            });
-        };
+            const toggleVisibility = (elementsToShow, elementsToHide) => {
+                elementsToShow.forEach(element => {
+                    if (element && element.classList.contains("hidden")) {
+                        element.classList.add("block");
+                        element.classList.remove("hidden");
+                    }
+                });
+                elementsToHide.forEach(element => {
+                    if (element && element.classList.contains("block")) {
+                        element.classList.add("hidden");
+                        element.classList.remove("block");
+                    }
+                });
+            };
 
-        button.addEventListener('click', () => {
-            console.log("Button clicked");
-            toggleVisibility();
-        });
+            if (editButtons.length) {
+                editButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
 
-        screen.addEventListener('click', () => {
-            console.log("Screen clicked");
-            toggleVisibility();
+                        // Ambil data dari tombol edit yang ditekan
+                        const id = this.getAttribute('data-id');
+                        const username = this.getAttribute('data-username');
+                        const id_operator = this.getAttribute('data-id_operator');
+                        const tanggal_lahir = this.getAttribute('data-tanggal_lahir');
+                        const alamat = this.getAttribute('data-alamat');
+
+                        // Set nilai-nilai dalam form edit
+                        document.querySelector("#edit_id").value = id;
+                        document.querySelector("#edit_username").value = username;
+                        document.querySelector("#edit_id_operator").value = id_operator;
+                        document.querySelector("#edit_tanggal_lahir").value = tanggal_lahir;
+                        document.querySelector("#edit_alamat").value = alamat;
+
+                        // Set action URL for the form
+                        if (editForm) {
+                            editForm.action = `/admin/operator/${id}`;
+                        }
+
+                        // Tampilkan modal edit
+                        toggleVisibility([OpenModalEdit, screen], [OpenModalCreate]);
+                    });
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(editForm);
+                    const id = document.querySelector("#edit_id").value;
+                    const url = `/admin/operator/${id}`;
+
+                    fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                username: formData.get('username'),
+                                password: formData.get('password'),
+                                id_operator: formData.get('id_operator'),
+                                tanggal_lahir: formData.get('tanggal_lahir'),
+                                alamat: formData.get('alamat')
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => { throw new Error(err.message || 'Error updating data'); });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Success:', data);
+                            toggleVisibility([], [OpenModalEdit, screen]);
+                            location.reload();
+                        })
+                        .catch((error) => {
+                            console.error('Error updating data:', error);
+                        });
+                });
+            }
+
+            if (createButton) {
+                createButton.addEventListener('click', () => {
+                    console.log("Create button clicked");
+                    toggleVisibility([OpenModalCreate, screen], [OpenModalEdit]);
+                });
+            }
+
+            if (editModalCancelButton) {
+                editModalCancelButton.addEventListener('click', function() {
+                    // Sembunyikan modal edit dan overlay screen
+                    toggleVisibility([], [OpenModalEdit, screen]);
+                });
+            }
+
+            if (createModalCancelButton) {
+                createModalCancelButton.addEventListener('click', function() {
+                    // Sembunyikan modal create dan overlay screen
+                    toggleVisibility([], [OpenModalCreate, screen]);
+                });
+            }
+
+            if (screen) {
+                screen.addEventListener('click', () => {
+                    console.log("Screen clicked");
+                    toggleVisibility([], [OpenModalCreate, OpenModalEdit, screen]);
+                });
+            }
         });
     </script>
 @endsection
+
+
 </body>
 
 </html>

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
+        schema::dropIfExists('robot'); 
         Schema::create('robot', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('id_robot');
             $table->char('nama');
             $table->char('tipe');
@@ -22,7 +23,6 @@ return new class extends Migration
             $table->timestamp('updated_at')->nullable();
             
             $table->foreign('id_robot')->references('id')->on('checkpoint');
-
         });
     }
 

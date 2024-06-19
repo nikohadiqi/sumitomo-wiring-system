@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        schema::dropIfExists('user');
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->char('username');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->enum('role', ['admin', 'operator'])->default('operator');
             $table->timestamps();
+            
         });
     }
 

@@ -35,28 +35,25 @@ class RobotController extends Controller
     {
         $validatedData = $request->validate([
             'nama'     => 'required|max:25',
-            'password'     => 'required|max:15',
-            'id_operator'     => 'required|max:15',
-            'tanggal_lahir'   => 'required',
-            'alamat'   => 'required',
+            'id_robot'     => 'required|max:15',
+            'tipe'     => 'required|max:15',
+            'baterai'   => 'required',
+            'warna'   => 'required',
             'create_at' => 'now();',
             'update_at' => 'now();'
         ]);
 
-        // Membuat hash dari password
-        $hashedPassword = Hash::make($validatedData['password']);
-
         // Membuat pengguna baru dengan data yang sudah di-hash
         $user = robot::create([
-            'username' => $validatedData['username'],
-            'id_operator' => $validatedData['id_operator'],
-            'tanggal_lahir' => $validatedData['tanggal_lahir'],
-            'password' => $hashedPassword,
-            'alamat' => $validatedData['alamat'],
+            'nama' => $validatedData['nama'],
+            'id_robot' => $validatedData['tipe'],
+            'tipe' => $validatedData['baterai'],
+            'baterai' => $validatedData['baterai'],
+            'warna' => $validatedData['warna'],
         ]);
 
         // Mengembalikan respons, misalnya redirect atau JSON response
-        return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.robot')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -82,26 +79,21 @@ class RobotController extends Controller
     {
                 // vadlidasi data dari requset
                 $validatedData =$request->validate([
-                    'username'     => 'required|max:25',
-                    'password'     => 'required|max:15',
-                    'id_operator'     => 'required|max:15',
-                    'tanggal_lahir'   => 'required',
-                    'alamat'   => 'required',
+                    'nama'     => 'required|max:25',
+                    'id_robot'     => 'required|max:15',
+                    'tipe'     => 'required|max:15',
+                    'baterai'   => 'required',
+                    'warna'   => 'required',
                     'create_at' => 'now();',
                     'update_at' => 'now();'
                 ]);
                 
-                // update data kecuali password
-                $robot->username = $validatedData['username'];
-                $robot->id_operator = $validatedData['id_operator'];
-                $robot->tanggal_lahir = $validatedData['tanggal_lahir'];
-                $robot->alamat = $validatedData['alamat'];
+                // update data kecuali id_robot
+                $robot->nama = $validatedData['nama'];
+                $robot->tipe = $validatedData['tipe'];
+                $robot->baterai = $validatedData['baterai'];
+                $robot->warna = $validatedData['warna'];
         
-                // mengecek password
-                if ($request->filled('password')) {
-                    $robot->password = Hash::make($validatedData['password']);
-                }
-                
                 // update data ke database
                 $robot->update($request->all());
         

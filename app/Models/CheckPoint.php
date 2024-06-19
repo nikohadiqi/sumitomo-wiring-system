@@ -9,6 +9,7 @@ class CheckPoint extends Model
 {
     use HasFactory;
 
+    protected $table='checkpoint';
     protected $fillable = [
         'nama_posisi',
         'status',

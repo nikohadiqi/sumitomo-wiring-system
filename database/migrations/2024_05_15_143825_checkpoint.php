@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-
+        schema::dropIfExists('checkpoint');
         Schema::create('checkpoint', function (Blueprint $table) {
             $table->id();
-            $table->char('nama_posisi');
-            $table->string('status');
+            $table->string('nama_posisi');
+            $table->enum('status', ['Menyala', 'Tidak Menyala'])->default('Menyala');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

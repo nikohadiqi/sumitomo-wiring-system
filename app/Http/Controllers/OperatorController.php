@@ -89,35 +89,38 @@ class OperatorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, $id)
     {
-        // vadlidasi data dari requset
-        $validatedData = $request->validate([
-            'username'     => 'required|max:25',
-            'password'     => 'required|max:15',
-            'id_operator'     => 'required|max:15',
-            'tanggal_lahir'   => 'required',
-            'alamat'   => 'required',
-            'create_at' => 'now();',
-            'update_at' => 'now();'
+        
+        // Validasi data input
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'password' => 'nullable|string|min:6',
+            'id_operator' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required|string|max:255',
         ]);
 
-        // update data kecuali password
-        $user->username = $validatedData['username'];
-        $user->id_operator = $validatedData['id_operator'];
-        $user->tanggal_lahir = $validatedData['tanggal_lahir'];
-        $user->alamat = $validatedData['alamat'];
+        // Mengambil data operator berdasarkan ID
+        $user = User::findOrFail($id);
 
-        // mengecek password
+        // Update data user
+        $user->username = $request->username;
+
+        // Hanya update password jika ada input password baru
         if ($request->filled('password')) {
-            $user->password = Hash::make($validatedData['password']);
+            $user->password = bcrypt($request->password);
         }
 
-        // update data ke database
-        $user->update($request->all());
+        $user->id_operator = $request->id_operator;
+        $user->tanggal_lahir = $request->tanggal_lahir;
+        $user->alamat = $request->alamat;
 
-        // kembali ke tampilan index operator
-        return redirect()->route('admin.operator')->with('success', 'Product updated successfully');
+        // Simpan perubahan
+        $user->save();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('admin.operator')->with('success', 'Data operator berhasil diperbarui.');
     }
 
     /**

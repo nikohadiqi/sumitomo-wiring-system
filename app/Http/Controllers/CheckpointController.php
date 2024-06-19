@@ -37,15 +37,13 @@ class CheckpointController extends Controller
          // Validasi data yang diterima dari request
          $validatedData = $request->validate([
             'nama_posisi'     => 'required|max:25',
-            'status'     => 'required|max:15',
             'create_at' => 'now();',
             'update_at' => 'now();'
         ]);
 
         // Membuat pengguna baru dengan data yang sudah di-hash
-        $user = checkpoint::create([
+        $user = CheckPoint::create([
             'nama_posisi' => $validatedData['nama_posisi'],
-            'status' => $validatedData['status'],
         ]);
 
         // Mengembalikan respons, misalnya redirect atau JSON response
