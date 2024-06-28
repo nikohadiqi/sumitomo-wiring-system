@@ -14,15 +14,15 @@ return new class extends Migration
         schema::dropIfExists('robot'); 
         Schema::create('robot', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_robot');
             $table->char('nama');
+            $table->string('nama_posisi');
             $table->char('tipe');
             $table->string('baterai');
             $table->string('warna');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             
-            $table->foreign('id_robot')->references('id')->on('checkpoint');
+            $table->foreign('nama_posisi')->references('nama_posisi')->on('checkpoint');
         });
     }
 

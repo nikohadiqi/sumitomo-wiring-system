@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Robot;
+use App\Models\CheckPoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,9 +16,9 @@ class RobotController extends Controller
     {
         // mengecek data di database
         $robot = DB::table('robot')->get();
- 
+        $checkpoint = Checkpoint::all('nama_posisi');
     	// mengirim data pegawai ke view index
-    	return view('admin.robot',['robot' => $robot]);
+    	return view('admin.robot', compact('checkpoint', 'robot'));
     }
 
     /**
@@ -33,9 +34,11 @@ class RobotController extends Controller
      */
     public function store(Request $request)
     {
+        $checkpoints = Checkpoint::all('nama_posisi');
+
         $validatedData = $request->validate([
             'nama'     => 'required|max:25',
-            'id_robot'     => 'required|max:15',
+            'nama_posisi'     => 'required|max:15',
             'tipe'     => 'required|max:15',
             'baterai'   => 'required',
             'warna'   => 'required',
@@ -44,16 +47,16 @@ class RobotController extends Controller
         ]);
 
         // Membuat pengguna baru dengan data yang sudah di-hash
-        $user = robot::create([
+        $robot = robot::create([
             'nama' => $validatedData['nama'],
-            'id_robot' => $validatedData['tipe'],
-            'tipe' => $validatedData['baterai'],
+            'nama_posisi' => $validatedData['nama_posisi'],
+            'tipe' => $validatedData['tipe'],
             'baterai' => $validatedData['baterai'],
             'warna' => $validatedData['warna'],
         ]);
 
         // Mengembalikan respons, misalnya redirect atau JSON response
-        return redirect()->route('admin.robot')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.robot.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -80,7 +83,7 @@ class RobotController extends Controller
                 // vadlidasi data dari requset
                 $validatedData =$request->validate([
                     'nama'     => 'required|max:25',
-                    'id_robot'     => 'required|max:15',
+                    'nama_posisi'     => 'required|max:15',
                     'tipe'     => 'required|max:15',
                     'baterai'   => 'required',
                     'warna'   => 'required',
@@ -88,9 +91,10 @@ class RobotController extends Controller
                     'update_at' => 'now();'
                 ]);
                 
-                // update data kecuali id_robot
+                // update data kecuali nama_posisi
                 $robot->nama = $validatedData['nama'];
                 $robot->tipe = $validatedData['tipe'];
+                $robot->nama_posisi = $validatedData['nama_posisi'];
                 $robot->baterai = $validatedData['baterai'];
                 $robot->warna = $validatedData['warna'];
         
@@ -98,7 +102,7 @@ class RobotController extends Controller
                 $robot->update($request->all());
         
                 // kembali ke tampilan index operator
-                return redirect()->route('admin.robot')->with('success','Product updated successfully');
+                return redirect()->route('admin.robot.index')->with('success','Product updated successfully');
             }
 
     /**
@@ -110,6 +114,6 @@ class RobotController extends Controller
         $robot->delete();
 
         //kembali ke tampilan index operator
-        return redirect()->route('admin.robot')->with(['success' => 'Data Berhasil Dihapus!']);
+        return redirect()->route('admin.robot.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

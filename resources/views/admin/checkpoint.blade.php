@@ -26,7 +26,7 @@
                                         <path clip-rule="evenodd" fill-rule="evenodd"
                                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
-                                    Add product
+                                    Tambah CheckPoint
                                 </a>
                             </div>
 
@@ -76,19 +76,24 @@
                                                 class="appearance-none w-[3rem] focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-5 before:w-5 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5"
                                                 {{ $cp->status === 'menyala' ? 'checked' : '' }} />
                                         </td>
-                                        <td class="flex text-gray-900 px-6 py-2 ">
-                                            <a href="#" class="edit-btn my-5 mx-3 cursor-pointer"
-                                                    data-id="{{ $cp->id }}" data-username="{{ $cp->nama_posisi }}">
+                                        <form action="{{ route('admin.checkpoint.destroy', $cp->id) }}" method="POST">
+                                            <td class="flex px-6 py-2 ">
+                                                <a href="#" class="edit-btn my-5 mx-3 cursor-pointer"
+                                                    data-id="{{ $cp->id }}" data-nama="{{ $cp->nama_posisi }}"
+                                                    data-tipe="{{ $cp->status }}">
                                                     <img class="w-5 my-2 items-center justify-center"
                                                         src="{{ url('/img/pencil2.png') }}" alt="Edit">
                                                 </a>
-                                            <a href="#" class="my-5 mx-3">
-                                                <img class="w-5 my-2 items-center justify-center"
-                                                    src={{ url('/img/bin.png') }} alt="PBL">
-                                            </a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="my-5 mx-3">
+                                                    <img class="w-5 my-2 items-center justify-center"
+                                                        src={{ url('/img/bin.png') }} alt="PBL">
+                                                </button>
+                                            </td>
+                                        </form>
+                                    </tr>
                                 @endforeach
-                                </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -101,7 +106,7 @@
 
     <div id="OpenModalCreate"
         class="fixed z-20 w-[40%] h-[39%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form action="{{ route('checkpoint.store') }}" method="POST">
+        <form action="{{ route('admin.checkpoint.store') }}" method="POST">
             @csrf
             <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
                 Form Check Point
@@ -121,7 +126,7 @@
                 </button>
                 <button type="submit"
                     class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
-                    Update
+                    Simpan
                 </button>
             </div>
         </form>
@@ -129,7 +134,7 @@
     {{-- Modal Edit --}}
     <div id="OpenModalEdit"
         class="fixed z-20 w-[40%] h-[39%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form action="{{ route('checkpoint.store') }}" method="POST">
+        <form action="{{ route('admin.checkpoint.store') }}" method="POST">
             @csrf
             @method('PUT')
             <input type="hidden" name="edit_id" id="edit_id">
@@ -231,7 +236,9 @@
                         })
                         .then(response => {
                             if (!response.ok) {
-                                return response.json().then(err => { throw new Error(err.message || 'Error updating data'); });
+                                return response.json().then(err => {
+                                    throw new Error(err.message || 'Error updating data');
+                                });
                             }
                             return response.json();
                         })

@@ -14,7 +14,7 @@ return new class extends Migration
         schema::dropIfExists('checkpoint');
         Schema::create('checkpoint', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_posisi');
+            $table->string('nama_posisi')->unique();
             $table->enum('status', ['Menyala', 'Tidak Menyala'])->default('Menyala');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

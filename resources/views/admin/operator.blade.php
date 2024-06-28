@@ -26,7 +26,7 @@
                                         <path clip-rule="evenodd" fill-rule="evenodd"
                                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
-                                    Add product
+                                    Tambah Operator
                                 </a>
                             </div>
                             <thead class="bg-white border-b border-0">
@@ -81,7 +81,7 @@
                                         <td class="text-sm text-justify text-gray-900 font-light whitespace-nowra">
                                             {{ $p->alamat }}
                                         </td>
-                                        <form action="{{ route('operator.destroy', $p->id) }}" method="POST">
+                                        <form action="{{ route('admin.operator.destroy', $p->id) }}" method="POST">
                                             <td class="flex px-6 py-2 ">
                                                 <a href="#" class="edit-btn my-5 mx-3 cursor-pointer"
                                                     data-id="{{ $p->id }}" data-username="{{ $p->username }}"
@@ -112,7 +112,7 @@
 
     <div id="OpenModalCreate"
         class="fixed z-20 w-[40%] h-[95%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form action="{{ route('operator.store') }}" method="POST">
+        <form action="{{ route('admin.operator.store') }}" method="POST">
             @csrf
             <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
                 Form Operator
@@ -146,9 +146,9 @@
                     id="createModalCancelButton">
                     Cancel
                 </button>
-                <button type="submit"
+                <button type="submit"F
                     class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
-                    Update
+                    Simpan
                 </button>
             </div>
         </form>
@@ -157,7 +157,7 @@
     {{-- Modal Edit --}}
     <div id="OpenModalEdit"
         class="fixed z-20 w-[40%] h-[83%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form id="editForm" method="POST" action="{{ route('operator.update', $p->id) }}">
+        <form id="editForm" method="POST" action="{{ route('admin.operator.update', $p->id) }}">
             @csrf
             @method('PUT')
             <input type="hidden" name="edit_id" id="edit_id">
@@ -276,7 +276,9 @@
                         })
                         .then(response => {
                             if (!response.ok) {
-                                return response.json().then(err => { throw new Error(err.message || 'Error updating data'); });
+                                return response.json().then(err => {
+                                    throw new Error(err.message || 'Error updating data');
+                                });
                             }
                             return response.json();
                         })

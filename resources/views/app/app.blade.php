@@ -10,6 +10,7 @@
 <body>
     @include('app.navbar')
     @include('app.sidebar')
+    
     <div class="container mx-auto mt-5">
         @yield('content')
     </div>

@@ -16,7 +16,10 @@ class OperatorController extends Controller
 
     public function operator()
     {
-        return view('operator.dashboard');
+        $checkpoint = DB::table('checkpoint')->get();
+        $robot = DB::table('robot')->get();
+    	// mengirim data pegawai ke view index
+    	return view('operator.dashboard', compact('checkpoint', 'robot'));
     }
     public function index()
     {
@@ -53,19 +56,19 @@ class OperatorController extends Controller
         // Membuat hash dari password
         $hashedPassword = Hash::make($validatedData['password']);
 
-        // Membuat pengguna baru dengan data yang sudah di-hash
-        $user = user::create([
-            'username' => $validatedData['username'],
-            'id_operator' => $validatedData['id_operator'],
-            'tanggal_lahir' => $validatedData['tanggal_lahir'],
-            'password' => $hashedPassword,
-            'alamat' => $validatedData['alamat'],
-            'role' => $validatedData['role'],
+        $user = new User();
+        $user->username = $validatedData['username'];
+        $user->role = $validatedData['role'];
+        $user->password = $hashedPassword;
+        $user->id_operator = $validatedData['id_operator'];
+        $user->tanggal_lahir = $validatedData['tanggal_lahir'];
+        $user->alamat = $validatedData['alamat'];
 
-        ]);
-
-        // Mengembalikan respons, misalnya redirect atau JSON response
-        return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Disimpan!']);
+        if ($user->save()) {
+            return response()->json(['message' => 'Operator created successfully'], 201);
+        } else {
+            return response()->json(['message' => 'Operator creation failed'], 500);
+        }
     }
 
     /**
@@ -91,7 +94,7 @@ class OperatorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         // Validasi data input
         $request->validate([
             'username' => 'required|string|max:255',
@@ -120,7 +123,7 @@ class OperatorController extends Controller
         $user->save();
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.operator')->with('success', 'Data operator berhasil diperbarui.');
+        return redirect()->route('admin.operator.index')->with('success', 'Data operator berhasil diperbarui.');
     }
 
     /**
@@ -132,6 +135,6 @@ class OperatorController extends Controller
         $user->delete();
 
         //kembali ke tampilan index operator
-        return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Dihapus!']);
+        return redirect()->route('admin.operator.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

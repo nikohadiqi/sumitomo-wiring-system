@@ -15,6 +15,7 @@ class Robot extends Model
     protected $fillable = [
       'nama',
       'id_robot',
+      'nama_posisi',
       'tipe',
       'baterai',
       'warna',

@@ -17,14 +17,14 @@ class RobotSeeder extends Seeder
             [
                 'nama'=>'Nasi Padang',
                 'tipe'=>'AGV',
-                'id_robot'=>1,
+                'nama_posisi'=>'Gedung A',
                 'baterai'=>'50%',
                 'warna'=>'#537823',
             ],
             [
                 'nama'=>'Nasi Lemak',
                 'tipe'=>'Produksi',
-                'id_robot'=>2,
+                'nama_posisi'=>'Gedung B',
                 'baterai'=>'90%',
                 'warna'=>'#082547',
             ]

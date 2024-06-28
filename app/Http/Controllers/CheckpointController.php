@@ -47,7 +47,7 @@ class CheckpointController extends Controller
         ]);
 
         // Mengembalikan respons, misalnya redirect atau JSON response
-        return redirect()->route('admin.checkpoint')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.checkpoint.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -105,7 +105,7 @@ class CheckpointController extends Controller
         $checkpoint->update($request->all());
 
         // kembali ke tampilan index operator
-        return redirect()->route('admin.checkpoint')->with('success','Product updated successfully');
+        return redirect()->route('admin.checkpoint.index')->with('success','Product updated successfully');
     }
 
     /**
@@ -117,7 +117,7 @@ class CheckpointController extends Controller
         $checkpoint->delete();
 
         //kembali ke tampilan index operator
-        return redirect()->route('admin.operator')->with(['success' => 'Data Berhasil Dihapus!']);
+        return redirect()->route('admin.checkpoint.index')->with(['success' => 'Data Berhasil Dihapus!']);
     
     }
     public function toggleStatus(Request $request)

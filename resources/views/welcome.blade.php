@@ -21,7 +21,7 @@
 
 </nav>
 
-    <form action="/proses_login" method="POST" class="bg-white w-[70%] h-auto p-7 rounded-xl mx-auto max-w-[1000px]">
+    <form action="/login" method="POST" class="bg-white w-[70%] h-auto p-7 rounded-xl mx-auto max-w-[1000px]">
       @csrf
         <div class="mx-auto max-w-[17rem]">
             <h1 class="text-center text-5xl text-blue-900">Login</h1>
@@ -40,9 +40,7 @@
             </div>
             <button class="bg-[#7488C5] font-medium p-2 md:p-4 text-white uppercase w-full rounded-xl">Login</button>
         </div-->
-
-
-    </form->
+    </form>
 
     <!-- component -->
     <!-- <div class="bg-white-400 h-screen overflow-hidden flex items-center justify-center">

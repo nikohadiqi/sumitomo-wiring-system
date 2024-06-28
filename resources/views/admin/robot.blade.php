@@ -26,7 +26,7 @@
                                         <path clip-rule="evenodd" fill-rule="evenodd"
                                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
-                                    Add product
+                                    Tambah Robot
                                 </a>
                             </div>
                             <thead class="bg-white border-b border-0">
@@ -83,22 +83,30 @@
                                         </td>
                                         <td
                                             class="text-sm text-gray-900 font-light px-6 py-4 text-center whitespace-nowrap">
-                                            {{ $r->id_robot }}
+                                            {{ $r->nama_posisi }}
                                         </td>
                                         <td class="px-6 py-4 text-center">
                                             <div class="w-7 h-7 inline-block rounded-full"
                                                 style="background-color: {{ $r->warna }}"></div>
                                         </td>
-                                        <td class="flex px-6 py-2 ">
-                                            <a type="button" class="my-5 mx-3 cursor-pointer" id="editProductModalButton">
-                                                <img class="w-5 my-2 items-center justify-center"
-                                                    src={{ url('/img/pencil2.png') }} alt="PBL">
-                                            </a>
-                                            <a href="#" class="my-5 mx-3">
-                                                <img class="w-5 my-2 items-center justify-center"
-                                                    src={{ url('/img/bin.png') }} alt="PBL">
-                                            </a>
-                                        </td>
+                                        <form action="{{ route('admin.robot.destroy', $r->id) }}" method="POST">
+                                            <td class="flex px-6 py-2 ">
+                                                <a href="#" class="edit-btn my-5 mx-3 cursor-pointer"
+                                                    data-id="{{ $r->id }}" data-nama="{{ $r->nama }}"
+                                                    data-tipe="{{ $r->tipe }}" data-baterai="{{ $r->baterai }}"
+                                                    data-nama_posisi="{{ $r->nama_posisi }}"
+                                                    data-warna="{{ $r->warna }}">
+                                                    <img class="w-5 my-2 items-center justify-center"
+                                                        src="{{ url('/img/pencil2.png') }}" alt="Edit">
+                                                </a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="my-5 mx-3">
+                                                    <img class="w-5 my-2 items-center justify-center"
+                                                        src={{ url('/img/bin.png') }} alt="PBL">
+                                                </button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -112,7 +120,7 @@
     {{-- Modal Create --}}
     <div id="OpenModalCreate"
         class="fixed z-20 w-[40%] h-[80%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form action="{{ route('robot.store') }}" method="POST">
+        <form action="{{ route('admin.robot.store') }}" method="POST">
             @csrf
             <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
                 Form Robot
@@ -128,9 +136,12 @@
                 <input name="baterai" type="text"
                     id="baterai"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
                     placeholder="baterai" required="">
-                <select name="id_robot" id="id_robot"
+                <select name="nama_posisi" id="nama_posisi"
                     class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required>
-                    <option value="{{ $r->id }}"></option>
+                    <option value="" disabled selected hidden>Pilih Nama Posisi</option>
+                    @foreach ($checkpoint as $cp)
+                        <option value="{{ $cp->nama_posisi }}">{{ $cp->nama_posisi }}</option>
+                    @endforeach
                 </select>
                 <div class="flex justify-center items-center mx-5">
                     <input id="warna" name="warna"
@@ -141,8 +152,14 @@
             </div>
             <hr class="w-full h-px bg-[#18517C]">
             <div class="flex justify-center items-center mx-[50%] my-3">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                    Button
+                <button type="button"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full"
+                    id="createModalCancelButton">
+                    Cancel
+                </button>
+                <button type="submit"F
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
+                    Simpan
                 </button>
             </div>
         </form>
@@ -150,37 +167,52 @@
 
     {{-- Modal Edit --}}
     <div id="OpenModalEdit"
-        class="fixed z-20 w-[40%] h-[70%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
-        <form action="{{ route('robot.update', $r->id_robot) }}" method="POST" enctype="multipart/form-data">
+        class="fixed z-20 w-[40%] h-[80%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white hidden rounded-md shadow-lg overflow-hidden">
+        <form action="{{ route('admin.robot.update', $r->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="edit_id" id="edit_id">
             <div class="text-xl font-medium text-gray-900 px-6 py-4 text-left">
                 Edit Robot
             </div>
             <hr class="w-30 h-px mx-5 mr-[20] bg-[#18517C]">
             <div class="my-5 mx-10">
-                <input name="nama" type="tex t"
-                    id="nama"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                <input name="nama" type="text"
+                    id="edit_nama"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
                     value="{{ old('nama', $r->nama) }}" required="">
                 <input name="tipe" type="text"
-                    id="tipe"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
-                    value="{{ old('nama', $r->tipe) }}" required="">
+                    id="edit_tipe"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    value="{{ old('tipe', $r->tipe) }}" required="">
                 <input name="baterai" type="text"
-                    id="baterai"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
-                    value="{{ old('nama', $r->baterai) }}" required="">
+                    id="edit_baterai"class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border"
+                    value="{{ old('baterai', $r->baterai) }}" required="">
+                <select name="nama_posisi" id="edit_nama_posisi"
+                    class="bg-gray-50 my-3 border-gray-300 text-sm w-full p-2.5 rounded-lg border" required>
+                    <option value="" disabled selected hidden>Pilih Nama Posisi</option>
+                    @foreach ($checkpoint as $cp)
+                        <option value="{{ $cp->nama_posisi }}">{{ $cp->nama_posisi }}</option>
+                    @endforeach
+                </select>
                 <div class="flex justify-center items-center mx-5">
-                    <input id="warna"
+                    <input id="edit_warna"
                         class="bg-gray-50 my-3 border-gray-300 text-sm w-70 p-2.5 rounded-lg border text-center cont"
-                        required="" value="{{ old('nama', $r->warna) }}">
-                    <input id="colorInput" class=" mx-5 w-12 h-12 border-2 cursor-pointer" type="color">
+                        required="" value="{{ $r->warna }}">
+                    <input id="edit_colorInput" class="mx-5 w-12 h-12 border-2 cursor-pointer" type="color"
+                        value="{{ $r->warna }}">
                 </div>
             </div>
             <hr class="w-full h-px bg-[#18517C]">
             <div class="flex justify-center items-center mx-[50%] my-3">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                    Button
+                <button type="button"
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full"
+                    id="createModalCancelButton">
+                    Cancel
                 </button>
+                <button type="submit"F
+                    class="bg-blue-500 hover:bg-blue-700 mx-2 text-white font-bold py-2 px-4 rounded-full">
+                    Update
             </div>
+            </button>
         </form>
     </div>
 @endsection
@@ -188,61 +220,167 @@
 
 @section('scripts')
     <script>
-        const createButton = document.querySelector("#createProductModalButton");
-        const editButton = document.querySelector("#editProductModalButton");
-        const OpenModalCreate = document.querySelector("#OpenModalCreate");
-        const OpenModalEdit = document.querySelector("#OpenModalEdit");
-        const screen = document.querySelector("#screen");
+        document.addEventListener('DOMContentLoaded', function() {
+            const createButton = document.querySelector("#createProductModalButton");
+            const editButtons = document.querySelectorAll(".edit-btn");
+            const OpenModalCreate = document.querySelector("#OpenModalCreate");
+            const OpenModalEdit = document.querySelector("#OpenModalEdit");
+            const screen = document.querySelector("#screen");
+            const editModalCancelButton = document.querySelector("#editModalCancelButton");
+            const createModalCancelButton = document.querySelector("#createModalCancelButton");
+            const editForm = document.querySelector("#editForm");
 
-        const toggleVisibility = (elementsToShow, elementsToHide) => {
-            elementsToShow.forEach(element => {
-                if (element.classList.contains("hidden")) {
-                    element.classList.add("block");
-                    element.classList.remove("hidden");
-                }
-            });
-            elementsToHide.forEach(element => {
-                if (element.classList.contains("block")) {
-                    element.classList.add("hidden");
-                    element.classList.remove("block");
-                }
-            });
-        };
+            const toggleVisibility = (elementsToShow, elementsToHide) => {
+                elementsToShow.forEach(element => {
+                    if (element && element.classList.contains("hidden")) {
+                        element.classList.add("block");
+                        element.classList.remove("hidden");
+                    }
+                });
+                elementsToHide.forEach(element => {
+                    if (element && element.classList.contains("block")) {
+                        element.classList.add("hidden");
+                        element.classList.remove("block");
+                    }
+                });
+            };
 
-        createButton.addEventListener('click', () => {
-            console.log("Create button clicked");
-            toggleVisibility([OpenModalCreate, screen], [OpenModalEdit]);
+            if (editButtons.length) {
+                editButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        // Ambil data dari tombol edit yang ditekan
+                        const id = this.getAttribute('data-id');
+                        const data_nama = this.getAttribute('data-nama');
+                        const tipe = this.getAttribute('data-tipe');
+                        const baterai = this.getAttribute('data-baterai');
+                        const nama_posisi = this.getAttribute('data-nama_posisi');
+                        const warna = this.getAttribute('data-warna');
+
+
+                        // Set nilai-nilai dalam form edit
+                        document.querySelector("#edit_id").value = id;
+                        document.querySelector("#edit_nama").value = nama;
+                        document.querySelector("#edit_tipe").value = tipe;
+                        document.querySelector("#edit_baterai").value = baterai;
+                        document.querySelector("#edit_nama_posisi").value = nama_posisi;
+                        document.querySelector("#edit_warna").value = warna;
+
+
+                        // Set action URL for the form
+                        if (editForm) {
+                            editForm.action = `/admin/robot/${id}`;
+                        }
+
+                        // Tampilkan modal edit
+                        toggleVisibility([OpenModalEdit, screen], [OpenModalCreate]);
+                    });
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(editForm);
+                    const id = document.querySelector("#edit_id").value;
+                    const url = `/admin/robot/${id}`;
+
+                    fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                nama: formData.get('nama'),
+                                tipe: formData.get('tipe'),
+                                baterai: formData.get('baterai'),
+                                nama_posisi: formData.get('nama_posisi'),
+                                warna: formData.get('warna')
+
+
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => {
+                                    throw new Error(err.message || 'Error updating data');
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Success:', data);
+                            toggleVisibility([], [OpenModalEdit, screen]);
+                            location.reload();
+                        })
+                        .catch((error) => {
+                            console.error('Error updating data:', error);
+                        });
+                });
+            }
+
+            if (createButton) {
+                createButton.addEventListener('click', () => {
+                    console.log("Create button clicked");
+                    toggleVisibility([OpenModalCreate, screen], [OpenModalEdit]);
+                });
+            }
+
+            if (editModalCancelButton) {
+                editModalCancelButton.addEventListener('click', function() {
+                    // Sembunyikan modal edit dan overlay screen
+                    toggleVisibility([], [OpenModalEdit, screen]);
+                });
+            }
+
+            if (createModalCancelButton) {
+                createModalCancelButton.addEventListener('click', function() {
+                    // Sembunyikan modal create dan overlay screen
+                    toggleVisibility([], [OpenModalCreate, screen]);
+                });
+            }
+
+            if (screen) {
+                screen.addEventListener('click', () => {
+                    console.log("Screen clicked");
+                    toggleVisibility([], [OpenModalCreate, OpenModalEdit, screen]);
+                });
+            }
         });
 
-        editButton.addEventListener('click', () => {
-            console.log("Edit button clicked");
-            toggleVisibility([OpenModalEdit, screen], [OpenModalCreate]);
-        });
+        var savedColor = '{{ $r->warna }}';
 
-        screen.addEventListener('click', () => {
-            console.log("Screen clicked");
-            toggleVisibility([], [OpenModalCreate, OpenModalEdit, screen]);
-        });
-
-        // Function to set background color
-        function setBackgroundColor(color) {
-            document.getElementById('warna').style.backgroundColor = color;
-        }
+        // Set nilai input type color saat modal edit dibuka
+        document.getElementById('edit_colorInput').value = savedColor;
 
         // Update color picker and background when text input changes
         document.getElementById('warna').addEventListener('input', function(event) {
             var color = event.target.value;
             if (/^#[0-9A-F]{6}$/i.test(color)) { // Validate hex color
                 document.getElementById('colorInput').value = color;
-                setBackgroundColor(color);
             }
         });
 
+        // Update color picker and background when text input changes
+        document.getElementById('edit_warna').addEventListener('input', function(event) {
+            var color = event.target.value;
+            if (/^#[0-9A-F]{6}$/i.test(color)) { // Validate hex color
+                document.getElementById('edit_colorInput').value = color;
+            }
+        });
         // Update text input and background when color picker changes
         document.getElementById('colorInput').addEventListener('input', function(event) {
             var color = event.target.value;
             document.getElementById('warna').value = color;
-            setBackgroundColor(color);
+        });
+
+        document.getElementById('edit_colorInput').addEventListener('input', function(event) {
+            var color = event.target.value;
+            document.getElementById('edit_warna').value = color;
         });
 
         // Initialize background color on page load
@@ -250,7 +388,6 @@
             var initialColor = '#ffffff'; // Default color
             document.getElementById('warna').value = initialColor;
             document.getElementById('colorInput').value = initialColor;
-            setBackgroundColor(initialColor);
         });
     </script>
 @endsection
